@@ -4,11 +4,9 @@ import Search from "./components/Search";
 import WeatherResults from "./components/WeatherResults";
 import Spinner from "./components/Spinner";
 
-const api = {
-  key: "863fee40b865ab802e428110f41ab09e",
-  base: "https://api.openweathermap.org/data/2.5/",
-  geo: "http://api.openweathermap.org/geo/1.0/",
-};
+const API_KEY = process.env.REACT_APP_API_KEY;
+const API_BASE = process.env.REACT_APP_API_BASE;
+const API_GEO = process.env.REACT_APP_API_GEO;
 
 function App() {
   const [query, setQuery] = useState("");
@@ -22,7 +20,7 @@ function App() {
     setLoading(true);
 
     // Get cordinates by name
-    fetch(`${api.geo}direct?q=${query}&limit=5&appid=${api.key}`)
+    fetch(`${API_GEO}direct?q=${query}&limit=5&appid=${API_KEY}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -31,7 +29,7 @@ function App() {
         // Fetching location
 
         fetch(
-          `${api.base}weather?lat=${result[0].lat}&lon=${result[0].lon}&appid=${api.key}&units=metric`
+          `${API_BASE}weather?lat=${result[0].lat}&lon=${result[0].lon}&appid=${API_KEY}&units=metric`
         )
           .then((res) => res.json())
           .then((result) => {
