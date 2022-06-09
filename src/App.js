@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+import Search from "./components/Search";
+import WeatherResults from "./components/WeatherResults";
+import Spinner from "./components/Spinner";
+
 const api = {
   key: "863fee40b865ab802e428110f41ab09e",
   base: "https://api.openweathermap.org/data/2.5/",
@@ -9,25 +13,31 @@ const api = {
 function App() {
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [isCelsius, setIsCelsius] = useState(true);
 
   const search = (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     // Get cordinates by name
-    fetch(`${api.geo}direct?q=${query}&limit=1&appid=${api.key}`)
+    fetch(`${api.geo}direct?q=${query}&limit=5&appid=${api.key}`)
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result);
+        console.log(result);
         // console.log(result[0].lat);
 
         // Fetching location
+
         fetch(
-          `${api.base}weather?lat=${result[0].lat}&lon=${result[0].lon}&appid=${api.key}`
+          `${api.base}weather?lat=${result[0].lat}&lon=${result[0].lon}&appid=${api.key}&units=metric`
         )
           .then((res) => res.json())
           .then((result) => {
             setWeather(result);
             setQuery("");
+            setLoading(false);
             console.log(result);
           });
       });
@@ -67,27 +77,26 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div
+      className={
+        typeof weather.main != "undefined"
+          ? weather.main.temp > 16
+            ? "container warm"
+            : "container cold"
+          : "container"
+      }
+    >
       <main>
-        <div className="search-box">
-          <form onSubmit={search}>
-            <input
-              type="text"
-              className="search-bar"
-              placeholder="Search..."
-              onChange={(e) => setQuery(e.target.value)}
-              value={query}
-            />
-          </form>
-        </div>
-        <div className="location-box">
-          <div className="location">{weather.name}</div>
-          <div className="date">{dateBuilder(new Date())}</div>
-        </div>
-        <div className="weather-box">
-          <div className="temp">{}°C</div>
-          <div className="weather">Sunny</div>
-        </div>
+        <Search search={search} query={query} setQuery={setQuery} />
+
+        {Object.keys(weather).length !== 0 && (
+          <WeatherResults
+            weather={weather}
+            dateBuilder={dateBuilder}
+            loading={loading}
+          />
+        )}
+        {loading === true && <Spinner />}
       </main>
     </div>
   );

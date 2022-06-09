@@ -10,8 +10,16 @@ body {
 }
 
 .container {
-  background: linear-gradient(140deg, #ffb703, #fb8500);
   height: 100vh;
+  background: linear-gradient(140deg, #49df69, #329247);
+}
+
+.warm {
+  background: linear-gradient(140deg, #ffb703, #fb8500);
+}
+
+.cold {
+  background: linear-gradient(140deg, #8ecae6, #219ebc);
 }
 
 main {
@@ -64,6 +72,7 @@ main {
 
 .weather-box {
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 .temp {
@@ -85,4 +94,33 @@ main {
   color: #fff;
   font-size: 3rem;
   text-shadow: 3px 3px rgba(50, 50, 70, 0.3);
+}
+
+.details-box {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pressure,
+.humidity {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 0.65rem 0.75rem;
+  width: 50%;
+  max-width: 150px;
+
+  color: #023047;
+  font-size: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 3px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.spinner {
+  margin: 0 auto;
+  text-align: center;
 }
